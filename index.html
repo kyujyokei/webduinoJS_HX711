@@ -3,16 +3,67 @@
 <head>
     <script src="https://webduino.io/components/webduino-js//dist/webduino-all.js"></script>
     <script src="https://webduino.io/components/webduino-js//src/module/HX711.js"></script>
+  
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+    <title>Webduino Blockly Demo 01</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://webduino.io/components/webduino-js/dist/webduino-all.min.js"></script>
+    <script src="https://blockly.webduino.io/webduino-blockly.js"></script>
+    <script src="https://blockly.webduino.io/lib/firebase.js"></script>
+    <script src="https://blockly.webduino.io/lib/runtime.min.js"></script>
+  
+  
     <script>
     var board, hx711;
+    var myFirebase;
+      
     board = new webduino.WebArduino('qv7d');
     board.on(webduino.BoardEvent.READY, function() {
+      
+       board.systemReset();
+       board.samplingInterval = 3000;
+     
+        myFirebase = new Firebase("https://watercup-e06b3.firebaseio.com/");
+      
         hx711 = new webduino.module.HX711(
             board, board.getDigitalPin(6), board.getDigitalPin(7));
         hx711.on(function(d) {
+          
+          setInterval(function () {
+
             data.innerHTML =  d+ " g";
+          
+          if (d > 0) {
+           myFirebase.push({
+              time:get_time("hms"),
+              d
+            });
+         }
+            
+          }, 3000);
         });
     });
+      
+      function get_time(t) {
+        var varTime = new Date(),
+          varHours = varTime.getHours(),
+          varMinutes = varTime.getMinutes(),
+          varSeconds = varTime.getSeconds();
+        var varNow;
+        if (t == "hms") {
+          varNow = varHours + ":" + varMinutes + ":" + varSeconds;
+        } else if (t == "h") {
+          varNow = varHours;
+        } else if (t == "m") {
+          varNow = varMinutes;
+        } else if (t == "s") {
+          varNow = varSeconds;
+        }
+        return varNow;
+    }
+      
+      
     </script>
 </head>
 
