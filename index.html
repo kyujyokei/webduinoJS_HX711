@@ -1,0 +1,50 @@
+<html>
+<head>
+    <script src="https://webduino.io/components/webduino-js//dist/webduino-all.js"></script>
+    <script src="https://webduino.io/components/webduino-js//src/module/HX711.js"></script>
+    <script>
+    var board, hx711;
+    board = new webduino.WebArduino('qv7d');
+    board.on(webduino.BoardEvent.READY, function() {
+        hx711 = new webduino.module.HX711(
+            board, board.getDigitalPin(6), board.getDigitalPin(7));
+        hx711.on(function(d) {
+            data.innerHTML =  d+ " g";
+        });
+    });
+    </script>
+</head>
+
+<body>
+    <h1>Electronic scales:</h1>
+    <p>Weight</p>
+    <span id='data'></span>
+
+<script id="jsbin-source-html" type="text/html">
+<html>
+<head>
+    <script src="https://webduino.io/components/webduino-js//dist/webduino-all.js"><\/script>
+    <script src="https://webduino.io/components/webduino-js//src/module/HX711.js"><\/script>
+    <script>
+    var board, hx711;
+    board = new webduino.WebArduino('qv7d');
+    board.on(webduino.BoardEvent.READY, function() {
+        hx711 = new webduino.module.HX711(
+            board, board.getDigitalPin(6), board.getDigitalPin(7));
+        hx711.on(function(d) {
+            data.innerHTML =  d+ " g";
+        });
+    });
+    <\/script>
+</head>
+<body>
+    <h1>Electronic scales:</h1>
+    <p>Weight</p>
+    <span id='data'></span>
+</body>
+</html>
+</script>
+
+</body>
+
+</html>
