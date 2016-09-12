@@ -1,4 +1,3 @@
-
 <html>
 <head>
     <script src="https://webduino.io/components/webduino-js//dist/webduino-all.js"></script>
@@ -17,29 +16,32 @@
     <script>
     var board, hx711;
     var myFirebase;
-    var weight1;
-    var weight2;
+    var weight;
+
       
     board = new webduino.WebArduino('qv7d');
     board.on(webduino.BoardEvent.READY, function() {
       
        board.systemReset();
        board.samplingInterval = 1000;
+       
      
-        myFirebase = new Firebase("https://watercup-e06b3.firebaseio.com/");
+        myFirebase = new Firebase("https://watercup-e06b3.firebaseio.com/messages/");
       
         hx711 = new webduino.module.HX711(
         board, board.getDigitalPin(6), board.getDigitalPin(7));
         hx711.on(function(d) {
           
        //   setInterval(function () {
-
           data.innerHTML =  d+ " g";
+          weight = d
           
           if (d > 10) {
            myFirebase.push({
-              time:get_time("hms"),
-              d
+             date:get_date("ymd"),
+             time:get_time("hms"),
+             weight
+              
             });
          }
             
@@ -64,6 +66,32 @@
         }
         return varNow;
     }
+      
+  function get_date(t) {
+    var varDay = new Date(),
+      varYear = varDay.getFullYear(),
+      varMonth = varDay.getMonth() + 1,
+      varDate = varDay.getDate();
+    var varNow;
+    if (t == "ymd") {
+      varNow = varYear + "/" + varMonth + "/" + varDate;
+    } else if (t == "mdy") {
+      varNow = varMonth + "/" + varDate + "/" + varYear;
+    } else if (t == "dmy") {
+      varNow = varDate + "/" + varMonth + "/" + varYear;
+    } else if (t == "y") {
+      varNow = varYear;
+    } else if (t == "m") {
+      varNow = varMonth;
+    } else if (t == "d") {
+      varNow = varDate;
+    }
+    return varNow;
+  }
+
+
+
+
       
       
     </script>
