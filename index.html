@@ -17,6 +17,9 @@
     var board, hx711;
     var myFirebase;
     var weight;
+    var record = new Array(10);
+    var i;
+    var lastW;
 
       
     board = new webduino.WebArduino('qv7d');
@@ -32,21 +35,20 @@
         board, board.getDigitalPin(6), board.getDigitalPin(7));
         hx711.on(function(d) {
           
-       //   setInterval(function () {
           data.innerHTML =  d+ " g";
           weight = d
-          
-          if (d > 10) {
-           myFirebase.push({
-             date:get_date("ymd"),
-             time:get_time("hms"),
-             weight
-              
-            });
-         }
-            
-     //     }, 3000);
-        });
+              if(weight-lastW>10){
+                myFirebase.push({
+                     date:get_date("ymd"),
+                     time:get_time("hms"),
+                     weight
+                    });
+              }
+             lastW = weight;     
+
+       });
+      
+      
     });
       
       function get_time(t) {
